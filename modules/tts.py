@@ -1,19 +1,16 @@
-import os
+from tempfile import NamedTemporaryFile
 from gtts import gTTS
 
 
-def generate_speech(
-    text,
-    output_file="outputs/output.mp3"
-):
-    # Create the outputs directory if it doesn't exist
-    os.makedirs("outputs", exist_ok=True)
-
+def generate_speech(text):
     tts = gTTS(
         text=text,
         lang="en"
     )
 
-    tts.save(output_file)
+    temp_file = NamedTemporaryFile(delete=False, suffix=".mp3")
+    temp_file.close()
 
-    return output_file
+    tts.save(temp_file.name)
+
+    return temp_file.name
